@@ -32,8 +32,8 @@ void setup() {
 void loop() {
     uint16_t position = qtr.readLineBlack(sensorValues);
     Serial.println(position);
-    analogWrite(EnA1, 200);
-    analogWrite(EnA2, 200);
+    analogWrite(EnA1, 100);
+    analogWrite(EnA2, 100);
     
   if (position < 1000) {
     //turn right
