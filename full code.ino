@@ -8,6 +8,10 @@ const int In2 = 12;
 const int In3 = 11;
 const int In4 = 10;
 
+//enable pins
+const int EnA1 = 6; 
+const int EnA2 = 9;
+
 void setup() {
   //set up and calibrate sensors
   qtr.setTypeRC();
@@ -20,26 +24,30 @@ void setup() {
   pinMode(In2, OUTPUT);
   pinMode(In3, OUTPUT);
   pinMode(In4, OUTPUT);
+  pinMode(EnA1, OUTPUT); 
+  pinMode(EnA2, OUTPUT); 
   Serial.begin(9600);
 }
 
 void loop() {
     uint16_t position = qtr.readLineBlack(sensorValues);
     Serial.println(position);
-
+    analogWrite(EnA1, 200);
+    analogWrite(EnA2, 200);
+    
   if (position < 1000) {
     //turn right
-    digitalWrite(In1, LOW);
-    digitalWrite(In2, HIGH);
-    digitalWrite(In3, LOW);
-    digitalWrite(In4, LOW);
-  }
-  else if (position > 2000) {
-    //turn left
     digitalWrite(In3, LOW);
     digitalWrite(In4, HIGH);
     digitalWrite(In1, LOW);
     digitalWrite(In2, LOW);
+  }
+  else if (position > 2000) {
+    //turn left
+    digitalWrite(In1, LOW);
+    digitalWrite(In2, HIGH);
+    digitalWrite(In3, LOW);
+    digitalWrite(In4, LOW);
   }
   else{
     digitalWrite(In1, LOW);
