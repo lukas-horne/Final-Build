@@ -32,27 +32,32 @@ void setup() {
 void loop() {
     uint16_t position = qtr.readLineBlack(sensorValues);
     Serial.println(position);
-    analogWrite(EnA1, 100);
-    analogWrite(EnA2, 100);
+
     
   if (position < 1000) {
-    //turn right
+    //turn right motor on
     digitalWrite(In3, LOW);
     digitalWrite(In4, HIGH);
     digitalWrite(In1, LOW);
     digitalWrite(In2, LOW);
+    analogWrite(EnA1, 60);
+    analogWrite(EnA2, 80);
   }
   else if (position > 2000) {
-    //turn left
-    digitalWrite(In1, LOW);
-    digitalWrite(In2, HIGH);
+    //turn left motor on
+    digitalWrite(In1, HIGH);
+    digitalWrite(In2, LOW);
     digitalWrite(In3, LOW);
     digitalWrite(In4, LOW);
+    analogWrite(EnA1, 80);
+    analogWrite(EnA2, 60);
   }
   else{
-    digitalWrite(In1, LOW);
-    digitalWrite(In2, HIGH);
+    digitalWrite(In1, HIGH);
+    digitalWrite(In2, LOW);
     digitalWrite(In3, LOW);
     digitalWrite(In4, HIGH);
+    analogWrite(EnA1, 80);
+    analogWrite(EnA2, 80);
     }
 }
