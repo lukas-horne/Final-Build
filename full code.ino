@@ -33,6 +33,11 @@ void loop() {
     uint16_t position = qtr.readLineBlack(sensorValues);
     Serial.println(position);
 
+//left of line 3000
+//right of line 0
+  int MotorR = map(position, 0, 3000, 100, 0);
+  int MotorL = map(position, 0, 3000, 0, 100);
+
     
   if (position < 1000) {
     //turn right motor on
@@ -40,8 +45,8 @@ void loop() {
     digitalWrite(In4, HIGH);
     digitalWrite(In1, LOW);
     digitalWrite(In2, LOW);
-    analogWrite(EnA1, 60);
-    analogWrite(EnA2, 80);
+    analogWrite(EnA1, MotorR);
+    analogWrite(EnA2, MotorR);
   }
   else if (position > 2000) {
     //turn left motor on
@@ -49,8 +54,8 @@ void loop() {
     digitalWrite(In2, LOW);
     digitalWrite(In3, LOW);
     digitalWrite(In4, LOW);
-    analogWrite(EnA1, 80);
-    analogWrite(EnA2, 60);
+    analogWrite(EnA1, MotorL);
+    analogWrite(EnA2, MotorL);
   }
   else{
     digitalWrite(In1, HIGH);
