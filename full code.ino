@@ -44,18 +44,18 @@ void loop() {
     digitalWrite(In3, LOW);
     digitalWrite(In4, HIGH);
     digitalWrite(In1, LOW);
-    digitalWrite(In2, LOW);
-    analogWrite(EnA1, MotorR);
-    analogWrite(EnA2, MotorR);
+    digitalWrite(In2, HIGH);
+    analogWrite(EnA1, 80);
+    analogWrite(EnA2, 80);
   }
   else if (position > 2000) {
     //turn left motor on
     digitalWrite(In1, HIGH);
     digitalWrite(In2, LOW);
-    digitalWrite(In3, LOW);
+    digitalWrite(In3, HIGH);
     digitalWrite(In4, LOW);
-    analogWrite(EnA1, MotorL);
-    analogWrite(EnA2, MotorL);
+    analogWrite(EnA1, 80);
+    analogWrite(EnA2, 80);
   }
   else{
     digitalWrite(In1, HIGH);
