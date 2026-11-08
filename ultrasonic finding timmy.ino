@@ -13,8 +13,7 @@ const int In4 = 10;
 const int EnA1 = 6;
 const int EnA2 = 9;
 
-const int yes = 1;
-
+bool Bool = true;
 
 
 // Variables for duration of ping and the distance in cm
@@ -62,7 +61,7 @@ void loop() {
   int leftV;
   int straightV;
 
-  if (/* uses colour sensor to read the colour green meaning in toxic waste*/ yes == 1) {
+  if (/* uses colour sensor to read the colour green meaning in toxic waste*/ Bool == true) {
     straightV = straight();
 
     r();
@@ -70,34 +69,32 @@ void loop() {
 
     l();
     leftV = left();
+    
+    //get it back to facing forward with r()
+    r();
+    Bool = false;
   }
 
 
   int smallest = min(straightV, min(rightV, leftV));
   if (smallest == rightV) {
     //go right
-    digitalWrite(In3, LOW);
-    digitalWrite(In4, HIGH);
-    digitalWrite(In1, LOW);
-    digitalWrite(In2, HIGH);
-    analogWrite(EnA1, 80);
-    analogWrite(EnA2, 80);
-    delay(100);
+    r();
     s();
-  } 
-  else if (smallest == leftV) {
+    delay(5000);
+    motorOff();
+  } else if (smallest == leftV) {
     //go left
-    digitalWrite(In1, HIGH);
-    digitalWrite(In2, LOW);
-    digitalWrite(In3, HIGH);
-    digitalWrite(In4, LOW);
-    analogWrite(EnA1, 80);
-    analogWrite(EnA2, 80);
-    delay(100);
+    l();
     s();
+    delay(5000);
+    motorOff();
+
   } else if (smallest == straightV) {
     //go straight
     s();
+    delay(5000);
+    motorOff();
   }
 }
 
@@ -137,9 +134,10 @@ void r() {
   digitalWrite(In4, HIGH);
   digitalWrite(In1, LOW);
   digitalWrite(In2, HIGH);
-  analogWrite(EnA1, 80);
-  analogWrite(EnA2, 80);
-  delay(100);
+  analogWrite(EnA1, 100);
+  analogWrite(EnA2, 100);
+  delay(600);
+  motorOff();
 }
 
 void l() {
@@ -147,9 +145,10 @@ void l() {
   digitalWrite(In2, LOW);
   digitalWrite(In3, HIGH);
   digitalWrite(In4, LOW);
-  analogWrite(EnA1, 80);
-  analogWrite(EnA2, 80);
-  delay(200);
+  analogWrite(EnA1, 100);
+  analogWrite(EnA2, 100);
+  delay(1200);
+  motorOff();
 }
 
 void s() {
@@ -157,6 +156,13 @@ void s() {
   digitalWrite(In4, HIGH);
   digitalWrite(In1, HIGH);
   digitalWrite(In2, LOW);
-  analogWrite(EnA1, 80);
-  analogWrite(EnA2, 80);
+  analogWrite(EnA1, 100);
+  analogWrite(EnA2, 100);
+}
+
+void motorOff() {
+  digitalWrite(In3, LOW);
+  digitalWrite(In4, LOW);
+  digitalWrite(In1, LOW);
+  digitalWrite(In2, LOW);
 }
