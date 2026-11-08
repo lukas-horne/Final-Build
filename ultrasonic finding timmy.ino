@@ -3,10 +3,10 @@ const int echoPin = 8;
 
 
 //motor pins
-const int In1 = 13;
-const int In2 = 12;
-const int In3 = 11;
-const int In4 = 10;
+const int In1 = A5;
+const int In2 = A4;
+const int In3 = A3;
+const int In4 = A2;
 
 
 //enable pins
