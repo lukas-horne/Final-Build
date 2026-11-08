@@ -73,8 +73,8 @@ void loop() {
   }
 
 
-  int largest = max(straightV, max(rightV, leftV));
-  if (largest == rightV) {
+  int smallest = min(straightV, min(rightV, leftV));
+  if (smallest == rightV) {
     //go right
     digitalWrite(In3, LOW);
     digitalWrite(In4, HIGH);
@@ -85,7 +85,7 @@ void loop() {
     delay(100);
     s();
   } 
-  else if (largest == leftV) {
+  else if (smallest == leftV) {
     //go left
     digitalWrite(In1, HIGH);
     digitalWrite(In2, LOW);
@@ -95,7 +95,7 @@ void loop() {
     analogWrite(EnA2, 80);
     delay(100);
     s();
-  } else if (largest == straightV) {
+  } else if (smallest == straightV) {
     //go straight
     s();
   }
