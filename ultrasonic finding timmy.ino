@@ -28,8 +28,16 @@ long duration, cm;
 
 
 void setup() {
+  //ultrasonic
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
+  //motor
+  pinMode(In1, OUTPUT);
+  pinMode(In2, OUTPUT);
+  pinMode(In3, OUTPUT);
+  pinMode(In4, OUTPUT);
+  pinMode(EnA1, OUTPUT);
+  pinMode(EnA2, OUTPUT);
   // initialize serial communication:
   Serial.begin(9600);
 }
