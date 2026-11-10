@@ -1,7 +1,6 @@
 #include <SD.h>
 File myFile;
 const int CSPin = 10;
-char moves[64];
 
 //temporary colour sensor alternative
 bool Bool = true;
