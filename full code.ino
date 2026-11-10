@@ -9,8 +9,18 @@ const int In3 = A3;
 const int In4 = A2;
 
 //enable pins
-const int EnA1 = 6; 
+const int EnA1 = 6;
 const int EnA2 = 9;
+
+//timmy
+const int trigPin = 7;
+const int echoPin = 8;
+//variables for each direction value
+int rightV, leftV, straightV;
+// Variables for duration of ping and the distance in cm
+long duration, cm;
+bool Bool = true;
+
 
 void setup() {
   //set up and calibrate sensors
@@ -24,21 +34,17 @@ void setup() {
   pinMode(In2, OUTPUT);
   pinMode(In3, OUTPUT);
   pinMode(In4, OUTPUT);
-  pinMode(EnA1, OUTPUT); 
-  pinMode(EnA2, OUTPUT); 
+  pinMode(EnA1, OUTPUT);
+  pinMode(EnA2, OUTPUT);
+  //ultrasonic
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
   Serial.begin(9600);
 }
 
 void loop() {
-    uint16_t position = qtr.readLineBlack(sensorValues);
-    Serial.println(position);
-
-//left of line 3000
-//right of line 0
-  int MotorR = map(position, 0, 3000, 100, 0);
-  int MotorL = map(position, 0, 3000, 0, 100);
-
-    
+  uint16_t position = qtr.readLineBlack(sensorValues);
+  Serial.println(position);
   if (position < 1000) {
     //turn right motor on
     digitalWrite(In3, LOW);
@@ -47,8 +53,7 @@ void loop() {
     digitalWrite(In2, HIGH);
     analogWrite(EnA1, 80);
     analogWrite(EnA2, 80);
-  }
-  else if (position > 2000) {
+  } else if (position > 2000) {
     //turn left motor on
     digitalWrite(In1, HIGH);
     digitalWrite(In2, LOW);
@@ -56,17 +61,49 @@ void loop() {
     digitalWrite(In4, LOW);
     analogWrite(EnA1, 80);
     analogWrite(EnA2, 80);
-  }
-  else{
+  } else {
     digitalWrite(In1, HIGH);
     digitalWrite(In2, LOW);
     digitalWrite(In3, LOW);
     digitalWrite(In4, HIGH);
     analogWrite(EnA1, 80);
     analogWrite(EnA2, 80);
-    }
-}
+  }
+  if (/* uses colour sensor to read the colour green meaning in toxic waste*/ Bool == true) {
+    delay(5000);
+    straightV = readDistance();
+    r();
+    delay(5000);
+    rightV = readDistance();
+    l();
+    delay(5000);
+    leftV = readDistance();
+    //get it back to facing forward with r()
+    r();
+    delay(3000);
 
+    //gets smallest cm distance since the closest
+    int smallest = min(straightV, min(rightV, leftV));
+    if (smallest == rightV) {
+      //go right
+      r();
+      delay(3000);
+      s();
+      motorOff();
+    } else if (smallest == leftV) {
+      //go left
+      l();
+      delay(3000);
+      s();
+      motorOff();
+    } else if (smallest == straightV) {
+      //go straight
+      s();
+      motorOff();
+    }
+    Bool = false;
+  }
+}
 
 int readDistance() {
   digitalWrite(trigPin, LOW);
@@ -88,7 +125,6 @@ int readDistance() {
 long microsecondsToCentimetres(long microseconds) {
   return microseconds / 29 / 2;
 }
-
 
 void r() {
   digitalWrite(In1, HIGH);
