@@ -110,6 +110,7 @@ int readDistance(){
   Serial.print("cm");
   Serial.println();
   delay(100);
+  return cm;
 }
   long microsecondsToCentimetres(long microseconds){
   return microseconds / 29 / 2;
