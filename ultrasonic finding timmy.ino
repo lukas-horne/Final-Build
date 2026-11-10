@@ -1,27 +1,19 @@
 const int trigPin = 7;
 const int echoPin = 8;
 
-
-
-
 //motor pins
 const int In1 = A5;
 const int In2 = A4;
 const int In3 = A3;
 const int In4 = A2;
 
-
-
-
 //enable pins
 const int EnA1 = 6;
 const int EnA2 = 9;
 
-
 bool Bool = true;
 //variables for each direction value
   int rightV, leftV, straightV;
-
 
 // Variables for duration of ping and the distance in cm
 long duration, cm;
@@ -47,17 +39,16 @@ void loop() {
   if (/* uses colour sensor to read the colour green meaning in toxic waste*/ Bool == true) {
     delay(5000);
     straightV = readDistance();
-
-    delay(5000);
     r();
-    rightV = readDistance();
-
     delay(5000);
+    rightV = readDistance();
     l();
+    delay(5000);
     leftV = readDistance();
-   
     //get it back to facing forward with r()
     r();
+    
+  //gets smallest cm distance since the closest
   int smallest = min(straightV, min(rightV, leftV));
   if (smallest == rightV) {
     //go right
@@ -139,5 +130,6 @@ void motorOff() {
   digitalWrite(In4, LOW);
   digitalWrite(In1, LOW);
   digitalWrite(In2, LOW);
+  analogWrite(EnA1, 0);
+  analogWrite(EnA2, 0);
 }
-
