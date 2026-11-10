@@ -13,7 +13,7 @@ const int EnA2 = 9;
 
 bool Bool = true;
 //variables for each direction value
-  int rightV, leftV, straightV;
+int rightV, leftV, straightV;
 
 // Variables for duration of ping and the distance in cm
 long duration, cm;
@@ -47,39 +47,39 @@ void loop() {
     leftV = readDistance();
     //get it back to facing forward with r()
     r();
-    
-  //gets smallest cm distance since the closest
-  int smallest = min(straightV, min(rightV, leftV));
-  if (smallest == rightV) {
-    //go right
-    r();
-    s();
-    delay(5000);
-    motorOff();
-  } else if (smallest == leftV) {
-    //go left
-    l();
-    s();
-    delay(5000);
-    motorOff();
-  } else if (smallest == straightV) {
-    //go straight
-    s();
-    delay(5000);
-    motorOff();
-  }
+    delay(3000);
+
+    //gets smallest cm distance since the closest
+    int smallest = min(straightV, min(rightV, leftV));
+    if (smallest == rightV) {
+      //go right
+      r();
+      delay(3000);
+      s();
+      motorOff();
+    } else if (smallest == leftV) {
+      //go left
+      l();
+      delay(3000);
+      s();
+      motorOff();
+    } else if (smallest == straightV) {
+      //go straight
+      s();
+      motorOff();
+    }
     Bool = false;
   }
 }
 
-int readDistance(){
+int readDistance() {
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(5);
   digitalWrite(trigPin, LOW);
   duration = pulseIn(echoPin, HIGH);
-  
+
   // convert the time into a distance
   cm = microsecondsToCentimetres(duration);
 
@@ -89,30 +89,30 @@ int readDistance(){
   delay(100);
   return cm;
 }
-  long microsecondsToCentimetres(long microseconds){
+long microsecondsToCentimetres(long microseconds) {
   return microseconds / 29 / 2;
 }
 
 
 void r() {
-  digitalWrite(In3, LOW);
-  digitalWrite(In4, HIGH);
-  digitalWrite(In1, LOW);
-  digitalWrite(In2, HIGH);
-  analogWrite(EnA1, 100);
-  analogWrite(EnA2, 100);
-  delay(600);
-  motorOff();
-}
-
-void l() {
   digitalWrite(In1, HIGH);
   digitalWrite(In2, LOW);
   digitalWrite(In3, HIGH);
   digitalWrite(In4, LOW);
   analogWrite(EnA1, 100);
   analogWrite(EnA2, 100);
-  delay(1200);
+  delay(250);
+  motorOff();
+}
+
+void l() {
+  digitalWrite(In3, LOW);
+  digitalWrite(In4, HIGH);
+  digitalWrite(In1, LOW);
+  digitalWrite(In2, HIGH);
+  analogWrite(EnA1, 100);
+  analogWrite(EnA2, 100);
+  delay(370);
   motorOff();
 }
 
@@ -121,8 +121,8 @@ void s() {
   digitalWrite(In4, HIGH);
   digitalWrite(In1, HIGH);
   digitalWrite(In2, LOW);
-  analogWrite(EnA1, 100);
-  analogWrite(EnA2, 100);
+  analogWrite(EnA1, 115);
+  analogWrite(EnA2, 70);
 }
 
 void motorOff() {
