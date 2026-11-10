@@ -19,8 +19,8 @@ const int EnA2 = 9;
 
 
 bool Bool = true;
-
-
+//variables for each direction value
+  int rightV, leftV, straightV;
 
 
 // Variables for duration of ping and the distance in cm
@@ -38,30 +38,19 @@ void setup() {
   pinMode(In4, OUTPUT);
   pinMode(EnA1, OUTPUT);
   pinMode(EnA2, OUTPUT);
-  // initialize serial communication:
+  //initialise serial communication:
   Serial.begin(9600);
 }
 
 
-
-
 void loop() {
-  // The PING))) is triggered by a HIGH pulse of 2 or more microseconds.
-  // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
-  int rightV;
-  int leftV;
-  int straightV;
-
-
   if (/* uses colour sensor to read the colour green meaning in toxic waste*/ Bool == true) {
     delay(5000);
     straightV = readDistance();
 
-
     delay(5000);
     r();
     rightV = readDistance();
-
 
     delay(5000);
     l();
@@ -71,9 +60,6 @@ void loop() {
     r();
     Bool = false;
   }
-
-
-
 
   int smallest = min(straightV, min(rightV, leftV));
   if (smallest == rightV) {
@@ -88,8 +74,6 @@ void loop() {
     s();
     delay(5000);
     motorOff();
-
-
   } else if (smallest == straightV) {
     //go straight
     s();
@@ -105,14 +89,10 @@ int readDistance(){
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(5);
   digitalWrite(trigPin, LOW);
-
-
   duration = pulseIn(echoPin, HIGH);
-
-
+  
   // convert the time into a distance
   cm = microsecondsToCentimetres(duration);
-
 
   Serial.print(cm);
   Serial.print("cm");
@@ -123,10 +103,6 @@ int readDistance(){
   long microsecondsToCentimetres(long microseconds){
   return microseconds / 29 / 2;
 }
-
-
-
-
 
 
 void r() {
@@ -140,7 +116,6 @@ void r() {
   motorOff();
 }
 
-
 void l() {
   digitalWrite(In1, HIGH);
   digitalWrite(In2, LOW);
@@ -152,7 +127,6 @@ void l() {
   motorOff();
 }
 
-
 void s() {
   digitalWrite(In3, LOW);
   digitalWrite(In4, HIGH);
@@ -161,7 +135,6 @@ void s() {
   analogWrite(EnA1, 100);
   analogWrite(EnA2, 100);
 }
-
 
 void motorOff() {
   digitalWrite(In3, LOW);
