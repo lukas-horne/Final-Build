@@ -2,6 +2,8 @@ const int trigPin = 7;
 const int echoPin = 8;
 
 
+
+
 //motor pins
 const int In1 = A5;
 const int In2 = A4;
@@ -9,35 +11,87 @@ const int In3 = A3;
 const int In4 = A2;
 
 
+
+
 //enable pins
 const int EnA1 = 6;
 const int EnA2 = 9;
 
+
 bool Bool = true;
+
+
 
 
 // Variables for duration of ping and the distance in cm
 long duration, cm;
 
+
 void setup() {
-
-
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
-
-
   // initialize serial communication:
   Serial.begin(9600);
 }
 
 
+
+
 void loop() {
-
-
   // The PING))) is triggered by a HIGH pulse of 2 or more microseconds.
   // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
+  int rightV;
+  int leftV;
+  int straightV;
 
 
+  if (/* uses colour sensor to read the colour green meaning in toxic waste*/ Bool == true) {
+    delay(5000);
+    straightV = readDistance();
+
+
+    delay(5000);
+    r();
+    rightV = readDistance();
+
+
+    delay(5000);
+    l();
+    leftV = readDistance();
+   
+    //get it back to facing forward with r()
+    r();
+    Bool = false;
+  }
+
+
+
+
+  int smallest = min(straightV, min(rightV, leftV));
+  if (smallest == rightV) {
+    //go right
+    r();
+    s();
+    delay(5000);
+    motorOff();
+  } else if (smallest == leftV) {
+    //go left
+    l();
+    s();
+    delay(5000);
+    motorOff();
+
+
+  } else if (smallest == straightV) {
+    //go straight
+    s();
+    delay(5000);
+    motorOff();
+  }
+}
+
+
+int readDistance(){
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
@@ -56,78 +110,15 @@ void loop() {
   Serial.print("cm");
   Serial.println();
   delay(100);
-
-  int rightV;
-  int leftV;
-  int straightV;
-
-  if (/* uses colour sensor to read the colour green meaning in toxic waste*/ Bool == true) {
-    straightV = straight();
-
-    r();
-    rightV = right();
-
-    l();
-    leftV = left();
-    
-    //get it back to facing forward with r()
-    r();
-    Bool = false;
-  }
-
-
-  int smallest = min(straightV, min(rightV, leftV));
-  if (smallest == rightV) {
-    //go right
-    r();
-    s();
-    delay(5000);
-    motorOff();
-  } else if (smallest == leftV) {
-    //go left
-    l();
-    s();
-    delay(5000);
-    motorOff();
-
-  } else if (smallest == straightV) {
-    //go straight
-    s();
-    delay(5000);
-    motorOff();
-  }
 }
-
-
-long microsecondsToCentimetres(long microseconds) {
+  long microsecondsToCentimetres(long microseconds){
   return microseconds / 29 / 2;
 }
 
 
 
 
-int right() {
-  // turn right
-  delay(5000);
-  int distance = cm;
-  return distance;
-}
 
-
-int left() {
-  // turn left
-  delay(5000);
-  int distance = cm;
-  return distance;
-}
-
-
-int straight() {
-  //read straight
-  delay(5000);
-  int distance = cm;
-  return distance;
-}
 
 void r() {
   digitalWrite(In3, LOW);
@@ -140,6 +131,7 @@ void r() {
   motorOff();
 }
 
+
 void l() {
   digitalWrite(In1, HIGH);
   digitalWrite(In2, LOW);
@@ -151,6 +143,7 @@ void l() {
   motorOff();
 }
 
+
 void s() {
   digitalWrite(In3, LOW);
   digitalWrite(In4, HIGH);
@@ -160,9 +153,11 @@ void s() {
   analogWrite(EnA2, 100);
 }
 
+
 void motorOff() {
   digitalWrite(In3, LOW);
   digitalWrite(In4, LOW);
   digitalWrite(In1, LOW);
   digitalWrite(In2, LOW);
 }
+
