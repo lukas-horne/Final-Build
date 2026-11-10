@@ -66,3 +66,66 @@ void loop() {
     analogWrite(EnA2, 80);
     }
 }
+
+
+int readDistance() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+
+  // convert the time into a distance
+  cm = microsecondsToCentimetres(duration);
+
+  Serial.print(cm);
+  Serial.print("cm");
+  Serial.println();
+  delay(100);
+  return cm;
+}
+long microsecondsToCentimetres(long microseconds) {
+  return microseconds / 29 / 2;
+}
+
+
+void r() {
+  digitalWrite(In1, HIGH);
+  digitalWrite(In2, LOW);
+  digitalWrite(In3, HIGH);
+  digitalWrite(In4, LOW);
+  analogWrite(EnA1, 100);
+  analogWrite(EnA2, 100);
+  delay(250);
+  motorOff();
+}
+
+void l() {
+  digitalWrite(In3, LOW);
+  digitalWrite(In4, HIGH);
+  digitalWrite(In1, LOW);
+  digitalWrite(In2, HIGH);
+  analogWrite(EnA1, 100);
+  analogWrite(EnA2, 100);
+  delay(370);
+  motorOff();
+}
+
+void s() {
+  digitalWrite(In3, LOW);
+  digitalWrite(In4, HIGH);
+  digitalWrite(In1, HIGH);
+  digitalWrite(In2, LOW);
+  analogWrite(EnA1, 115);
+  analogWrite(EnA2, 70);
+}
+
+void motorOff() {
+  digitalWrite(In3, LOW);
+  digitalWrite(In4, LOW);
+  digitalWrite(In1, LOW);
+  digitalWrite(In2, LOW);
+  analogWrite(EnA1, 0);
+  analogWrite(EnA2, 0);
+}
