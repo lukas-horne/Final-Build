@@ -58,9 +58,6 @@ void loop() {
    
     //get it back to facing forward with r()
     r();
-    Bool = false;
-  }
-
   int smallest = min(straightV, min(rightV, leftV));
   if (smallest == rightV) {
     //go right
@@ -80,8 +77,9 @@ void loop() {
     delay(5000);
     motorOff();
   }
+    Bool = false;
+  }
 }
-
 
 int readDistance(){
   digitalWrite(trigPin, LOW);
