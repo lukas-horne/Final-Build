@@ -19,8 +19,27 @@ const int echoPin = 8;
 int rightV, leftV, straightV;
 // Variables for duration of ping and the distance in cm
 long duration, cm;
-bool Bool = true;
 
+// Define color sensor pins
+#define S0 A1
+#define S1 A0
+#define S2 13
+#define S3 12
+#define sensorOut 11
+
+int redMin = 23;     // Red minimum value
+int redMax = 168;    // Red maximum value
+int greenMin = 26;   // Green minimum value
+int greenMax = 208;  // Green maximum value
+int blueMin = 20;    // Blue minimum value
+int blueMax = 155;   // Blue maximum value
+
+// Variables for Color Pulse Width Measurements
+int redPW = 0;
+int greenPW = 0;
+int bluePW = 0;
+
+bool greenDetected = true;
 
 void setup() {
   //set up and calibrate sensors
@@ -39,37 +58,24 @@ void setup() {
   //ultrasonic
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
+
+  //colour sensor
+  pinMode(S0, OUTPUT);
+  pinMode(S1, OUTPUT);
+  pinMode(S2, OUTPUT);
+  pinMode(S3, OUTPUT);
+  pinMode(sensorOut, INPUT);
+  // Frequency scaling 20%
+  digitalWrite(S0, HIGH);
+  digitalWrite(S1, LOW);
   Serial.begin(9600);
 }
 
 void loop() {
   uint16_t position = qtr.readLineBlack(sensorValues);
   Serial.println(position);
-  if (position < 1000) {
-    //turn right motor on
-    digitalWrite(In3, LOW);
-    digitalWrite(In4, HIGH);
-    digitalWrite(In1, LOW);
-    digitalWrite(In2, HIGH);
-    analogWrite(EnA1, 80);
-    analogWrite(EnA2, 80);
-  } else if (position > 2000) {
-    //turn left motor on
-    digitalWrite(In1, HIGH);
-    digitalWrite(In2, LOW);
-    digitalWrite(In3, HIGH);
-    digitalWrite(In4, LOW);
-    analogWrite(EnA1, 80);
-    analogWrite(EnA2, 80);
-  } else {
-    digitalWrite(In1, HIGH);
-    digitalWrite(In2, LOW);
-    digitalWrite(In3, LOW);
-    digitalWrite(In4, HIGH);
-    analogWrite(EnA1, 80);
-    analogWrite(EnA2, 80);
-  }
-  if (/* uses colour sensor to read the colour green meaning in toxic waste*/ Bool == true) {
+  if (getRed() < 220 && getRed() > 180 && getGreen() < 236 && getGreen() > 212 && getBlue() < 200 && getBlue() > 174 && greenDetected == true) {
+    motorOff();
     delay(5000);
     straightV = readDistance();
     r();
@@ -89,19 +95,45 @@ void loop() {
       r();
       delay(3000);
       s();
+      delay(4000);
       motorOff();
     } else if (smallest == leftV) {
       //go left
       l();
       delay(3000);
       s();
+      delay(4000);
       motorOff();
     } else if (smallest == straightV) {
       //go straight
       s();
+      delay(4000);
       motorOff();
     }
-    Bool = false;
+    greenDetected = false;
+  } else if (position < 1000) {
+    //turn right motor on
+    digitalWrite(In3, LOW);
+    digitalWrite(In4, HIGH);
+    digitalWrite(In1, LOW);
+    digitalWrite(In2, LOW);
+    analogWrite(EnA1, 90);
+    analogWrite(EnA2, 80);
+  } else if (position > 2000) {
+    //turn left motor on
+    digitalWrite(In1, HIGH);
+    digitalWrite(In2, LOW);
+    digitalWrite(In3, LOW);
+    digitalWrite(In4, LOW);
+    analogWrite(EnA1, 90);
+    analogWrite(EnA2, 80);
+  } else {
+    digitalWrite(In1, HIGH);
+    digitalWrite(In2, LOW);
+    digitalWrite(In3, LOW);
+    digitalWrite(In4, HIGH);
+    analogWrite(EnA1, 90);
+    analogWrite(EnA2, 80);
   }
 }
 
@@ -164,4 +196,36 @@ void motorOff() {
   digitalWrite(In2, LOW);
   analogWrite(EnA1, 0);
   analogWrite(EnA2, 0);
+}
+
+
+//colour sensor functions
+int getRed() {
+  digitalWrite(S2, LOW);
+  digitalWrite(S3, LOW);
+  int PW;
+  PW = pulseIn(sensorOut, LOW);
+  int redValue;
+  redValue = map(PW, redMin, redMax, 255, 0);
+  return redValue;
+}
+
+int getGreen() {
+  digitalWrite(S2, HIGH);
+  digitalWrite(S3, HIGH);
+  int PW;
+  PW = pulseIn(sensorOut, LOW);
+  int greenValue;
+  greenValue = map(PW, greenMin, greenMax, 255, 0);
+  return greenValue;
+}
+
+int getBlue() {
+  digitalWrite(S2, LOW);
+  digitalWrite(S3, HIGH);
+  int PW;
+  PW = pulseIn(sensorOut, LOW);
+  int blueValue;
+  blueValue = map(PW, blueMin, blueMax, 255, 0);
+  return blueValue;
 }
