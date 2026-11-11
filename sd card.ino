@@ -1,8 +1,8 @@
 #include <SD.h>
 File myFile;
+
 const int CSPin = 10;
 
-//temporary colour sensor alternative
 bool Bool = true;
 
 //motor
@@ -22,18 +22,12 @@ void setup() {
   pinMode(EnA1, OUTPUT);
   pinMode(EnA2, OUTPUT);
   Serial.begin(9600);
-  Serial.println("Arduino started");
-
+  //sd card
   pinMode(CSPin, OUTPUT);
 }
 
 void loop() {
-  if (/*if it detects an SD card*/ Bool == true) {
-    
-    if (!SD.begin(CSPin)) {
-      return;
-    }
-
+  if (Bool == true && SD.begin(CSPin)) {
 
     // open the file for reading:
     myFile = SD.open("test.txt");
@@ -42,7 +36,6 @@ void loop() {
       Serial.println("Starting file");
       // read from the file until there's nothing else in it:
       while (myFile.available()) {
-        //Serial.println(moves[i]);
         switch (myFile.read()) {
           case 'L':
             left();
@@ -58,11 +51,9 @@ void loop() {
             break;
         }
       }
-      Serial.println("Finished file");
       // close the file:
       myFile.close();
       Bool = false;
-    } else {
     }
   }
 }
@@ -75,7 +66,7 @@ void left() {
   digitalWrite(In2, HIGH);
   analogWrite(EnA1, 100);
   analogWrite(EnA2, 100);
-  delay(740);
+  delay(600);
   f();
   delay(500);
   motorOff();
@@ -95,7 +86,7 @@ void right() {
   motorOff();
 }
 
-void forward(){
+void forward() {
   Serial.println("F");
   digitalWrite(In3, LOW);
   digitalWrite(In4, HIGH);
