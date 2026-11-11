@@ -5,7 +5,22 @@ const int CSPin = 10;
 //temporary colour sensor alternative
 bool Bool = true;
 
+//motor
+const int In1 = A5;
+const int In2 = A4;
+const int In3 = A3;
+const int In4 = A2;
+const int EnA1 = 6;
+const int EnA2 = 9;
+
 void setup() {
+  //motor pins to output
+  pinMode(In1, OUTPUT);
+  pinMode(In2, OUTPUT);
+  pinMode(In3, OUTPUT);
+  pinMode(In4, OUTPUT);
+  pinMode(EnA1, OUTPUT);
+  pinMode(EnA2, OUTPUT);
   Serial.begin(9600);
   Serial.println("Arduino started");
 
@@ -13,12 +28,8 @@ void setup() {
 }
 
 void loop() {
-  if (/*if im in green/toxic waste*/ Bool == true) {
-
-    // Note that even if it's not used as the CS pin, the hardware SS pin
-    // (10 on most Arduino boards, 53 on the Mega) must be left as an output
-    // or the SD library functions will not work.
-
+  if (/*if it detects an SD card*/ Bool == true) {
+    
     if (!SD.begin(CSPin)) {
       return;
     }
@@ -57,17 +68,72 @@ void loop() {
 }
 
 void left() {
-  Serial.println("Left");
+  Serial.println("L");
+  digitalWrite(In3, LOW);
+  digitalWrite(In4, HIGH);
+  digitalWrite(In1, LOW);
+  digitalWrite(In2, HIGH);
+  analogWrite(EnA1, 100);
+  analogWrite(EnA2, 100);
+  delay(740);
+  f();
+  delay(500);
+  motorOff();
 }
 
 void right() {
-  Serial.println("Right");
+  Serial.println("R");
+  digitalWrite(In1, HIGH);
+  digitalWrite(In2, LOW);
+  digitalWrite(In3, HIGH);
+  digitalWrite(In4, LOW);
+  analogWrite(EnA1, 100);
+  analogWrite(EnA2, 100);
+  delay(500);
+  f();
+  delay(500);
+  motorOff();
 }
 
-void forward() {
-  Serial.println("Forward");
+void forward(){
+  Serial.println("F");
+  digitalWrite(In3, LOW);
+  digitalWrite(In4, HIGH);
+  digitalWrite(In1, HIGH);
+  digitalWrite(In2, LOW);
+  analogWrite(EnA1, 115);
+  analogWrite(EnA2, 70);
+  delay(500);
+  motorOff();
 }
 
 void backward() {
-  Serial.println("Backward");
+  Serial.println("B");
+  digitalWrite(In3, HIGH);
+  digitalWrite(In4, LOW);
+  digitalWrite(In1, LOW);
+  digitalWrite(In2, HIGH);
+  analogWrite(EnA1, 115);
+  analogWrite(EnA2, 70);
+  delay(500);
+  motorOff();
+}
+
+void f() {
+  digitalWrite(In3, LOW);
+  digitalWrite(In4, HIGH);
+  digitalWrite(In1, HIGH);
+  digitalWrite(In2, LOW);
+  analogWrite(EnA1, 115);
+  analogWrite(EnA2, 70);
+  delay(500);
+  motorOff();
+}
+void motorOff() {
+  digitalWrite(In3, LOW);
+  digitalWrite(In4, LOW);
+  digitalWrite(In1, LOW);
+  digitalWrite(In2, LOW);
+  analogWrite(EnA1, 0);
+  analogWrite(EnA2, 0);
 }
