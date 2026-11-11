@@ -72,6 +72,11 @@ void setup() {
 }
 
 void loop() {
+//left of line 3000
+//right of line 0
+  int MotorR = map(position, 0, 3000, 100, 0);
+  int MotorL = map(position, 0, 3000, 0, 100);
+  
   uint16_t position = qtr.readLineBlack(sensorValues);
   Serial.println(position);
   if (getRed() < 220 && getRed() > 180 && getGreen() < 236 && getGreen() > 212 && getBlue() < 200 && getBlue() > 174 && greenDetected == true) {
@@ -117,16 +122,16 @@ void loop() {
     digitalWrite(In4, HIGH);
     digitalWrite(In1, LOW);
     digitalWrite(In2, LOW);
-    analogWrite(EnA1, 90);
-    analogWrite(EnA2, 80);
+    analogWrite(EnA1, MotorR);
+    analogWrite(EnA2, MotorL);
   } else if (position > 2000) {
     //turn left motor on
     digitalWrite(In1, HIGH);
     digitalWrite(In2, LOW);
     digitalWrite(In3, LOW);
     digitalWrite(In4, LOW);
-    analogWrite(EnA1, 90);
-    analogWrite(EnA2, 80);
+    analogWrite(EnA1, MotorR);
+    analogWrite(EnA2, MotorL);
   } else {
     digitalWrite(In1, HIGH);
     digitalWrite(In2, LOW);
